@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pregão do Campo – Leilão de gado online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --bg:#F3F4F0; --card:#FFFFFF; --line:#DCDFD8; --line2:#ECEEEA;
+    --ink:#1A1F1C; --ink2:#4A524D; --muted:#5B6360;
+    --accent:#1F3D2B; --green:#1F6B3A; --green-bg:#E4F0E7;
+    --orange:#8A3B08; --orange-bg:#FCE9DC; --gray-bg:#ECEEEA; --media:#C9CFC3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.display{font-family:'Archivo',sans-serif}
+  a{color:var(--accent);text-decoration:none}a:hover{color:#0F2418}
+  button{font-family:inherit;cursor:pointer}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  input{font-family:inherit}
+  [hidden]{display:none !important}
+  .wrap{max-width:1200px;margin:0 auto;padding-left:24px;padding-right:24px}
+  @media (max-width:560px){.wrap{padding-left:16px;padding-right:16px}}
+
+  header{background:var(--card);border-bottom:1px solid var(--line)}
+  .top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Archivo',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.01em}
+  nav{display:flex;flex-wrap:wrap;gap:20px;font-size:14px;font-weight:500}
+  .account{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:6px 10px;border-radius:999px}
+  .chip-green{background:var(--green-bg);color:var(--green)}
+  .chip-orange{background:var(--orange-bg);color:var(--orange);font-weight:700}
+  .btn-ghost{background:#fff;border:1px solid #C9CEC5;border-radius:8px;padding:0 14px;font-size:14px;font-weight:600;color:var(--ink);min-height:44px}
+  .btn-primary{border:none;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;font-size:15px;min-height:52px}
+
+  .hero{padding-top:48px;padding-bottom:32px}
+  .hero h1{margin:0;font-weight:800;font-size:clamp(30px,4.4vw,48px);line-height:1.05;letter-spacing:-.02em;max-width:760px}
+  .hero p{margin:16px 0 0;font-size:17px;line-height:1.55;color:var(--ink2);max-width:640px}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:32px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;gap:14px}
+  .num{flex:none;width:32px;height:32px;border-radius:999px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+  .step b{display:block;font-size:15px}
+  .step span{display:block;font-size:14px;color:var(--ink2);margin-top:4px;line-height:1.45}
+
+  .sec-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:16px}
+  .sec-head h2{margin:0;font-weight:700;font-size:26px}
+
+  .featured{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+  .f-lot{flex:999 1 520px;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .f-media{position:relative;height:320px;background:var(--media);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#2F3833;font-size:14px;font-weight:600}
+  .play{width:64px;height:64px;border-radius:999px;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center}
+  .tag{position:absolute;top:14px;left:14px;background:#fff;font-size:13px;font-weight:700;padding:6px 10px;border-radius:6px}
+  .thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:8px}
+  .thumbs div{height:72px;background:#DDE1D8;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#3E4741;text-align:center;padding:4px}
+  .f-info{padding:20px 24px 24px}
+  .f-info h3{margin:0;font-weight:700;font-size:24px}
+  .f-info .where{margin:6px 0 0;font-size:14px;color:var(--muted)}
+  dl{margin:20px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 24px;font-size:14px}
+  dt{color:var(--muted);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+  dd{margin:3px 0 0;font-weight:600}
+  .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+
+  .panel{flex:1 1 340px;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:18px}
+  .banner{display:flex;align-items:center;gap:10px;border-radius:10px;padding:12px 14px;font-weight:700;font-size:15px}
+  .b-green{background:var(--green-bg);color:var(--green)}
+  .b-orange{background:var(--orange-bg);color:var(--orange)}
+  .b-gray{background:var(--gray-bg);color:#3E4741}
+  .label{font-size:13px;font-weight:600;color:var(--muted)}
+  .upper{text-transform:uppercase;letter-spacing:.04em}
+  .row-between{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+  .ext{background:var(--orange-bg);color:var(--orange);font-size:12px;font-weight:700;padding:4px 8px;border-radius:6px}
+  .clock{font-family:'Archivo',sans-serif;font-weight:800;font-size:52px;line-height:1.05;font-variant-numeric:tabular-nums;margin-top:4px}
+  .price-block{border-top:1px solid #E6E8E3;padding-top:16px}
+  .big-price{font-family:'Archivo',sans-serif;font-weight:700;font-size:34px;margin-top:2px}
+  .small{font-size:14px;color:var(--ink2);margin-top:4px}
+  .incs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .hint{font-size:13px;color:var(--muted);margin-top:8px}
+  .auto{background:var(--bg);border-radius:10px;padding:14px}
+  .auto label{display:block;font-size:14px;font-weight:600}
+  .auto .desc{font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.4}
+  .auto .controls{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .auto input{flex:1 1 120px;min-width:0;min-height:44px;border:1px solid #C9CEC5;border-radius:8px;padding:0 12px;font-size:15px;background:#fff}
+  .auto .btn-outline{min-height:44px;border-radius:8px;border:1px solid var(--accent);background:#fff;color:var(--accent);font-weight:700;font-size:14px;padding:0 14px}
+  .auto-ok{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:13px;font-weight:600;color:var(--green)}
+  ol.hist{list-style:none;margin:0;padding:0}
+  ol.hist li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line2);font-size:14px}
+  ol.hist .me{font-weight:700;color:var(--green)}
+  ol.hist .other{color:#3E4741}
+  ol.hist .when{color:var(--muted);font-size:12px}
+  .note{font-size:12px;color:var(--muted);line-height:1.45}
+
+  .filters{display:flex;flex-wrap:wrap;gap:8px}
+  .filter{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid #C9CEC5;background:#fff;color:var(--ink);font-size:13px;font-weight:600}
+  .filter.on{border-color:var(--accent);background:var(--accent);color:#fff}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px}
+  .lot{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+  .lot .media{position:relative;height:160px;background:var(--media);display:flex;align-items:center;justify-content:center;gap:8px;color:#2F3833;font-size:13px;font-weight:600}
+  .lot .tag{top:12px;left:12px;font-size:12px;padding:5px 8px}
+  .timer{position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;gap:5px;background:#fff;color:var(--ink);font-size:12px;font-weight:700;padding:5px 8px;border-radius:6px;font-variant-numeric:tabular-nums}
+  .timer.urgent{background:var(--orange-bg);color:var(--orange)}
+  .timer.ended{background:var(--gray-bg);color:#3E4741}
+  .lot .body{padding:16px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .lot h3{margin:0;font-weight:700;font-size:18px;line-height:1.2}
+  .lot .meta{margin:5px 0 0;font-size:13px;color:var(--muted);line-height:1.4}
+  .verified{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--green)}
+  .lot .per{font-family:'Archivo',sans-serif;font-weight:700;font-size:24px}
+  .lot .sub{font-size:12px;color:var(--muted)}
+  .st{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+  .st-green{color:var(--green)} .st-orange{color:var(--orange)} .st-gray{color:var(--muted);font-weight:600}
+  .actions{display:flex;gap:8px;margin-top:auto}
+  .actions .btn-primary{flex:1 1 auto;min-height:44px;border-radius:8px;font-size:14px;padding:0 12px}
+
+  .rules{background:var(--card);border-top:1px solid var(--line)}
+  .rules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px 32px}
+  .rules-grid b{display:block;font-size:15px}
+  .rules-grid span{display:block;font-size:14px;color:var(--ink2);margin-top:4px;line-height:1.5}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap top">
+    <div class="brand">
+      <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1F3D2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 13l-7.5 7.5a2.12 2.12 0 0 1-3-3L11 10"/><path d="M16 16l6-6"/><path d="M8 8l6-6"/><path d="M9 7l8 8"/><path d="M21 11l-8-8"/></svg>
+      Pregão do Campo
+    </div>
+    <nav aria-label="Principal">
+      <a href="#lotes">Leilões abertos</a>
+      <a href="#regras">Como funciona</a>
+      <a href="#lotes">Vender meu lote</a>
+    </nav>
+    <div class="account">
+      <span class="chip chip-green">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        Comprador verificado
+      </span>
+      <button class="btn-ghost" type="button">Minha conta</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="wrap hero">
+  <h1>Lance de onde estiver. O cronômetro fecha o negócio.</h1>
+  <p>Lotes vistoriados, compradores e vendedores verificados. Cada lote fica aberto por um prazo; se alguém der lance nos últimos 3 minutos, o prazo se estende.</p>
+  <div class="steps">
+    <div class="step"><span class="num">1</span><div><b>Cadastro verificado</b><span>CPF ou CNPJ, inscrição de produtor e referência bancária. Só quem passa pela análise pode dar lance.</span></div></div>
+    <div class="step"><span class="num">2</span><div><b>Confira o lote</b><span>Vídeo, pesagem recente, idade, sanidade e laudo de vistoria de técnico credenciado.</span></div></div>
+    <div class="step"><span class="num">3</span><div><b>Dê seu lance</b><span>Lance por cabeça, manual ou automático até o seu teto. Avisamos no WhatsApp se alguém cobrir.</span></div></div>
+  </div>
+</section>
+
+<section id="destaque" class="wrap" style="padding-top:16px;padding-bottom:40px">
+  <div class="sec-head">
+    <h2>Encerrando agora</h2>
+    <span class="chip chip-orange">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      Teste: dê um lance e veja a disputa
+    </span>
+  </div>
+
+  <div class="featured">
+    <div class="f-lot">
+      <div class="f-media">
+        <span class="play"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="#1F3D2B"><path d="M8 5v14l11-7z"/></svg></span>
+        Vídeo do lote no curral
+        <span class="tag">Lote 01</span>
+      </div>
+      <div class="thumbs">
+        <div>Foto da pesagem</div>
+        <div>Lote de perfil</div>
+        <div>Laudo de vistoria (PDF)</div>
+      </div>
+      <div class="f-info">
+        <h3>30 garrotes Nelore</h3>
+        <p class="where">Mococa – SP · Vendedor: Fazenda [NOME]</p>
+        <dl>
+          <div><dt>Quantidade</dt><dd>30 cabeças</dd></div>
+          <div><dt>Raça</dt><dd>Nelore</dd></div>
+          <div><dt>Peso médio</dt><dd>268 kg · balança em 25/10</dd></div>
+          <div><dt>Idade</dt><dd>12 a 14 meses</dd></div>
+          <div><dt>Sanidade</dt><dd>Vacinas em dia · GTA na venda</dd></div>
+          <div><dt>Retirada</dt><dd>Até 5 dias · frete do comprador</dd></div>
+        </dl>
+        <div class="badges">
+          <span class="chip chip-green"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Vendedor verificado</span>
+          <span class="chip chip-green"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Vistoria por técnico credenciado</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div role="status" aria-live="polite">
+        <div id="f-lead" class="banner b-green" hidden><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>Você está liderando</div>
+        <div id="f-outbid" class="banner b-orange"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Seu lance foi superado</div>
+        <div id="f-won" class="banner b-green" hidden><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>Lote arrematado por você</div>
+        <div id="f-closed" class="banner b-gray" hidden>Leilão encerrado</div>
+      </div>
+
+      <div>
+        <div class="row-between">
+          <span class="label upper">Termina em</span>
+          <span id="f-ext" class="ext" hidden>Prorrogado +3 min</span>
+        </div>
+        <div id="f-time" class="clock">--:--</div>
+      </div>
+
+      <div class="price-block">
+        <div class="label">Lance atual por cabeça</div>
+        <div id="f-per" class="big-price"></div>
+        <div class="small">Total do lote <span id="f-total"></span> · <span id="f-count"></span> · 6 participantes</div>
+      </div>
+
+      <div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px">Cobrir com</div>
+        <div class="incs">
+          <button class="btn-primary fbid" type="button" data-inc="20">+ R$ 20</button>
+          <button class="btn-primary fbid" type="button" data-inc="50">+ R$ 50</button>
+          <button class="btn-primary fbid" type="button" data-inc="100">+ R$ 100</button>
+        </div>
+        <div class="hint">Lance mínimo agora: <span id="f-min"></span>/cab · valores por cabeça</div>
+      </div>
+
+      <div class="auto">
+        <label for="teto">Lance automático</label>
+        <div class="desc">Informe seu teto por cabeça. O sistema cobre outros lances por você, de R$ 20 em R$ 20, até esse valor.</div>
+        <div class="controls">
+          <input id="teto" type="number" inputmode="numeric" placeholder="Ex.: 3100">
+          <button id="ativar" class="btn-outline" type="button">Ativar</button>
+        </div>
+        <div id="auto-ok" class="auto-ok" hidden>
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <span id="auto-text"></span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:8px">Últimos lances</div>
+        <ol id="hist" class="hist"></ol>
+      </div>
+
+      <div class="note">Pagamento via conta garantia: o valor só é liberado ao vendedor depois da entrega e da conferência dos animais.</div>
+    </div>
+  </div>
+</section>
+
+<section id="lotes" class="wrap" style="padding-top:16px;padding-bottom:48px">
+  <div class="sec-head" style="justify-content:space-between;align-items:flex-end">
+    <h2>Leilões abertos</h2>
+    <div class="filters" role="group" aria-label="Filtrar por categoria">
+      <button class="filter on" type="button" data-cat="all">Todos</button>
+      <button class="filter" type="button" data-cat="bezerros">Bezerros</button>
+      <button class="filter" type="button" data-cat="garrotes">Garrotes</button>
+      <button class="filter" type="button" data-cat="novilhas">Novilhas</button>
+      <button class="filter" type="button" data-cat="vacas">Vacas</button>
+      <button class="filter" type="button" data-cat="boi">Boi magro</button>
+    </div>
+  </div>
+  <div id="grid" class="grid"></div>
+</section>
+
+<section id="regras" class="rules">
+  <div class="wrap" style="padding-top:40px;padding-bottom:48px">
+    <h2 style="margin:0 0 20px;font-weight:700;font-size:26px">Regras do lance</h2>
+    <div class="rules-grid">
+      <div><b>Valor por cabeça</b><span>Todo lance é por animal. O total do lote é calculado na hora. Incremento mínimo de R$ 20.</span></div>
+      <div><b>Prorrogação automática</b><span>Lance nos últimos 3 minutos estende o prazo para 3 minutos de novo. Ninguém ganha no último segundo.</span></div>
+      <div><b>Lance é compromisso</b><span>O lance vencedor obriga a compra. Desistência gera multa e suspensão do cadastro.</span></div>
+      <div><b>Pagamento protegido</b><span>O comprador paga numa conta garantia. O vendedor recebe após a entrega conferida.</span></div>
+      <div><b>Conferência na entrega</b><span>Pesagem na origem com tolerância de quebra definida no lote. Contestação até 48 h após o recebimento.</span></div>
+      <div><b>Avisos no WhatsApp</b><span>Avisamos quando seu lance for coberto e quando faltar 1 hora e 10 minutos para o fim.</span></div>
+    </div>
+    <p style="margin:32px 0 0;font-size:12px;color:var(--muted)">Protótipo · nome, lotes e valores ilustrativos.</p>
+  </div>
+</section>
+</main>
+
+<script>
+(function () {
+  var t0 = Date.now();
+  var state = {
+    autoMax: 0, rivals: 0, rivalTimer: null,
+    lots: {
+      L01: { per: 2910, count: 14, status: 'outbid', ends: t0 + 160000, extended: false },
+      L02: { per: 3150, count: 9, status: 'lead', ends: t0 + 72 * 60000 },
+      L03: { per: 2380, count: 21, status: 'outbid', ends: t0 + 185 * 60000 },
+      L04: { per: 6400, count: 3, status: 'none', ends: t0 + 28 * 3600000 },
+      L05: { per: 3720, count: 7, status: 'none', ends: t0 + 5 * 3600000 + 20 * 60000 },
+      L06: { per: 2650, count: 0, status: 'none', ends: t0 + 51 * 3600000 }
+    },
+    history: [
+      { who: 'Comprador #4821 · Mococa-SP', val: 2910, at: t0 - 40000 },
+      { who: 'Você', val: 2890, at: t0 - 130000, me: true },
+      { who: 'Comprador #1307 · Casa Branca-SP', val: 2870, at: t0 - 300000 },
+      { who: 'Comprador #4821 · Mococa-SP', val: 2850, at: t0 - 540000 }
+    ]
+  };
+  var info = {
+    L01: { n: 'Lote 01', title: '30 garrotes Nelore', qty: 30 },
+    L02: { n: 'Lote 02', title: '18 novilhas Nelore', qty: 18, cat: 'novilhas', meta: 'Casa Branca – SP · 290 kg méd. · 18 a 20 meses' },
+    L03: { n: 'Lote 03', title: '40 bezerros desmamados anelorados', qty: 40, cat: 'bezerros', meta: 'Tambaú – SP · 195 kg méd. · 7 a 8 meses' },
+    L04: { n: 'Lote 04', title: '12 vacas Girolando em lactação', qty: 12, cat: 'vacas', meta: 'São Sebastião da Grama – SP · 480 kg méd. · 4 a 6 anos' },
+    L05: { n: 'Lote 05', title: '25 bois magros Nelore', qty: 25, cat: 'boi', meta: 'Divinolândia – SP · 380 kg méd. · 24 a 26 meses' },
+    L06: { n: 'Lote 06', title: '20 bezerras Angus × Nelore', qty: 20, cat: 'bezerros', meta: 'Vargem Grande do Sul – SP · 210 kg méd. · 8 a 9 meses' }
+  };
+  var gridIds = ['L02', 'L03', 'L04', 'L05', 'L06'];
+
+  function $(id) { return document.getElementById(id); }
+  function money(n) { return 'R$ ' + Math.round(n).toLocaleString('pt-BR'); }
+  function pad(x) { return String(x).padStart(2, '0'); }
+  function left(ms) {
+    if (ms <= 0) return 'Encerrado';
+    var s = Math.floor(ms / 1000);
+    var d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+    if (d > 0) return d + 'd ' + pad(h) + 'h';
+    if (h > 0) return h + 'h ' + pad(m) + 'min';
+    return pad(m) + ':' + pad(sec);
+  }
+  function ago(at, now) {
+    var s = Math.max(0, Math.floor((now - at) / 1000));
+    if (s < 10) return 'agora';
+    if (s < 60) return 'há ' + s + ' s';
+    return 'há ' + Math.floor(s / 60) + ' min';
+  }
+  function plural(n) { return n + (n === 1 ? ' lance' : ' lances'); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  var ICON_CLOCK = '<svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  var ICON_OK = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg>';
+  var ICON_WARN = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>';
+  var ICON_DOT = '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg>';
+  var ICON_SHIELD = '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>';
+
+  // Monta os cards uma vez; depois só atualiza textos e estados
+  var grid = $('grid');
+  grid.innerHTML = gridIds.map(function (id) {
+    var i = info[id];
+    return '<article class="lot" data-id="' + id + '" data-cat="' + i.cat + '">' +
+      '<div class="media"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="#2F3833"><path d="M8 5v14l11-7z"/></svg><span>Vídeo do lote</span>' +
+      '<span class="tag">' + esc(i.n) + '</span>' +
+      '<span class="timer" data-k="timer">' + ICON_CLOCK + '<span data-k="time"></span></span></div>' +
+      '<div class="body">' +
+      '<div><h3>' + esc(i.title) + '</h3><p class="meta">' + esc(i.meta) + '</p></div>' +
+      '<div class="verified">' + ICON_SHIELD + 'Vendedor verificado · vistoria feita</div>' +
+      '<div><div class="sub" style="font-weight:600">Lance atual por cabeça</div><div class="per" data-k="per"></div>' +
+      '<div class="sub">Total <span data-k="total"></span> · <span data-k="count"></span></div></div>' +
+      '<div class="st st-green" data-k="lead">' + ICON_OK + 'Você está liderando</div>' +
+      '<div class="st st-orange" data-k="outbid">' + ICON_WARN + 'Seu lance foi superado</div>' +
+      '<div class="st st-gray" data-k="none">' + ICON_DOT + 'Você ainda não deu lance</div>' +
+      '<div class="st st-green" data-k="won">' + ICON_OK + 'Arrematado por você</div>' +
+      '<div class="st st-gray" data-k="closed">Leilão encerrado</div>' +
+      '<div class="actions"><button class="btn-primary" type="button" data-k="bid" data-id="' + id + '">Lance de <span data-k="next"></span></button>' +
+      '<button class="btn-ghost" type="button">Ver lote</button></div>' +
+      '</div></article>';
+  }).join('');
+
+  function bid(id, inc) {
+    var now = Date.now(), lot = state.lots[id];
+    if (lot.ends <= now) return;
+    lot.per += inc; lot.count += 1; lot.status = 'lead';
+    if (lot.ends - now < 180000) { lot.ends = now + 180000; lot.extended = true; }
+    if (id === 'L01') {
+      state.history.unshift({ who: 'Você', val: lot.per, at: now, me: true });
+      state.history = state.history.slice(0, 6);
+      if (state.rivals < 3) {
+        clearTimeout(state.rivalTimer);
+        state.rivalTimer = setTimeout(rival, 7000);
+      }
+    }
+    render();
+  }
+
+  // Comprador simulado cobre o lance para mostrar a disputa
+  function rival() {
+    var now = Date.now(), lot = state.lots.L01;
+    if (lot.ends <= now || lot.status !== 'lead') return;
+    var rv = lot.per + 20;
+    state.history.unshift({ who: 'Comprador #4821 · Mococa-SP', val: rv, at: now });
+    if (state.autoMax && state.autoMax >= rv + 20) {
+      lot.per = rv + 20; lot.count += 2; lot.status = 'lead';
+      state.history.unshift({ who: 'Você · automático', val: lot.per, at: now, me: true });
+      if (state.rivals + 1 < 3) { state.rivalTimer = setTimeout(rival, 7000); }
+    } else {
+      lot.per = rv; lot.count += 1; lot.status = 'outbid';
+    }
+    if (lot.ends - now < 180000) { lot.ends = now + 180000; lot.extended = true; }
+    state.history = state.history.slice(0, 6);
+    state.rivals += 1;
+    render();
+  }
+
+  function flags(lot, now) {
+    var ms = lot.ends - now, ended = ms <= 0;
+    return {
+      ms: ms, ended: ended,
+      lead: !ended && lot.status === 'lead',
+      outbid: !ended && lot.status === 'outbid',
+      none: !ended && lot.status === 'none',
+      won: ended && lot.status === 'lead',
+      closed: ended && lot.status !== 'lead'
+    };
+  }
+
+  function render() {
+    var now = Date.now();
+
+    // Lote em destaque
+    var L = state.lots.L01, f = flags(L, now);
+    $('f-lead').hidden = !f.lead;
+    $('f-outbid').hidden = !f.outbid;
+    $('f-won').hidden = !f.won;
+    $('f-closed').hidden = !f.closed;
+    $('f-ext').hidden = !(L.extended && !f.ended);
+    $('f-time').textContent = left(f.ms);
+    $('f-time').style.color = (!f.ended && f.ms < 600000) ? '#8A3B08' : '';
+    $('f-per').textContent = money(L.per);
+    $('f-total').textContent = money(L.per * info.L01.qty);
+    $('f-count').textContent = plural(L.count);
+    $('f-min').textContent = money(L.per + 20);
+    document.querySelectorAll('.fbid').forEach(function (b) { b.disabled = f.ended; });
+    $('ativar').disabled = f.ended;
+    $('auto-ok').hidden = !state.autoMax;
+    $('auto-text').textContent = state.autoMax ? 'Ativo até ' + money(state.autoMax) + '/cab' : '';
+    $('hist').innerHTML = state.history.map(function (h) {
+      return '<li><span class="' + (h.me ? 'me' : 'other') + '">' + esc(h.who) + '</span>' +
+        '<span style="white-space:nowrap;text-align:right"><strong>' + money(h.val) + '</strong> <span class="when">' + ago(h.at, now) + '</span></span></li>';
+    }).join('');
+
+    // Grade de lotes
+    gridIds.forEach(function (id) {
+      var card = grid.querySelector('[data-id="' + id + '"]');
+      var lot = state.lots[id], g = flags(lot, now);
+      var q = function (k) { return card.querySelector('[data-k="' + k + '"]'); };
+      q('time').textContent = left(g.ms);
+      q('timer').className = 'timer' + (g.ended ? ' ended' : (g.ms < 600000 ? ' urgent' : ''));
+      q('per').textContent = money(lot.per);
+      q('total').textContent = money(lot.per * info[id].qty);
+      q('count').textContent = plural(lot.count);
+      q('next').textContent = money(lot.per + 50);
+      ['lead', 'outbid', 'none', 'won', 'closed'].forEach(function (k) { q(k).hidden = !g[k]; });
+      q('bid').disabled = g.ended;
+    });
+  }
+
+  // Eventos
+  document.querySelectorAll('.fbid').forEach(function (b) {
+    b.addEventListener('click', function () { bid('L01', parseInt(b.getAttribute('data-inc'), 10)); });
+  });
+  grid.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-k="bid"]');
+    if (b && !b.disabled) bid(b.getAttribute('data-id'), 50);
+  });
+  $('ativar').addEventListener('click', function () {
+    var v = parseInt($('teto').value, 10);
+    if (!v) { $('teto').focus(); return; }
+    state.autoMax = v;
+    var l = state.lots.L01;
+    if (l.status === 'outbid' && v >= l.per + 20) { bid('L01', 20); } else { render(); }
+  });
+  document.querySelectorAll('.filter').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var cat = b.getAttribute('data-cat');
+      document.querySelectorAll('.filter').forEach(function (x) { x.classList.toggle('on', x === b); });
+      grid.querySelectorAll('.lot').forEach(function (c) {
+        c.hidden = !(cat === 'all' || c.getAttribute('data-cat') === cat);
+      });
+    });
+  });
+
+  render();
+  setInterval(render, 1000);
+})();
+</script>
+</body>
+</html>
