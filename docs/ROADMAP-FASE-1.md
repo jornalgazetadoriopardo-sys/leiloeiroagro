@@ -6,8 +6,8 @@ Objetivo (guia, seção 15): um leilão real com 3 a 5 lotes e 20 a 30 comprador
 |---|---|---|
 | 1 | **Fundação**: projeto Next.js (PWA), banco multi-tenant com RLS, motor de lances (seção 7) com os 12 testes obrigatórios, página inicial | ✅ feito |
 | 2 | Login por celular (OTP), cadastro, envio de documentos, consentimentos e opt-in de WhatsApp | ✅ feito |
-| 3 | Página do lote: vídeo, fotos, laudo, ficha, cronômetro, lance rápido com confirmação, lance automático, histórico | próxima |
-| 4 | Painel admin: fila de cadastros, cadastro de lotes (mídias), leilões e agendamento, ao vivo, pós-venda com "Marcar como pago" | |
+| 3 | Página do lote: vídeo, fotos, laudo, ficha, cronômetro, lance rápido com confirmação, lance automático, histórico | ✅ feito |
+| 4 | Painel admin: fila de cadastros, cadastro de lotes (mídias), leilões e agendamento, ao vivo, pós-venda com "Marcar como pago" | próxima |
 | 5 | Notificações: despachante de push + WhatsApp Cloud API (coberto, dou-lhe 3, arremate, cadastro aprovado) | |
 | 6 | Meus lances, Minhas compras (simples), Perfil, Preferências de aviso; service worker | |
 | 7 | Ensaio geral com leilão de teste, ajustes e publicação | |
@@ -56,6 +56,20 @@ com ícone + texto), `/termos` (termos, regras e privacidade — **versão provi
 Até a etapa 4 (painel admin), a aprovação é feita no SQL Editor:
 `select analisar_cadastro('<id do usuário>', 'aprovar');` (logado como admin) ou
 `update usuarios set status_verificacao = 'verificado' where id = '<id>';`.
+
+## O que a etapa 3 entregou
+
+- `/lotes/[id]`: vídeo (YouTube não listado ou arquivo), fotos, laudo em PDF, ficha técnica completa, cronômetro
+  com horário de Brasília e aviso de prorrogação, lance atual e total, botões de lance rápido (da configuração),
+  lance automático com teto (ativar, aumentar, cancelar quando não lidera) e histórico anônimo.
+- Todo lance passa por uma tela de confirmação ("R$ 2.960/cab · total R$ 88.800"). Cada confirmação leva uma
+  chave única: se a internet cair e a pessoa tocar de novo, o lance não é duplicado.
+- Atualização ao vivo pelo Supabase Realtime (preço, prazo, histórico).
+- Visitante, cadastro incompleto, em análise ou com ajuste veem o motivo e o botão certo no lugar dos lances.
+- Banco (`20261103000005_pagina_lote.sql`): bucket público `midias-lotes` (só a equipe envia) e
+  `config_publica(tenant)`. Arquivo para o SQL Editor: `supabase/atualizacoes/etapa-3-pagina-lote.sql`.
+- `supabase/atualizacoes/dados-de-teste.sql`: leilão fictício com 3 lotes para testar (com bloco para apagar).
+- Perguntas e respostas no lote ficam para a Fase 2 (seção 15).
 
 ## Valores provisórios (aguardam decisão — seção 17)
 

@@ -160,3 +160,21 @@
   .dados-lista dt{font-size:12px}
   .texto-legal h2{font-size:22px;margin:32px 0 8px}
   .texto-legal p,.texto-legal li{font-size:16px;line-height:1.6;color:var(--ink2)}
+
+  /* Página do lote */
+  .video-lote{display:block;width:100%;aspect-ratio:16/9;border:0;background:#000}
+  .thumbs .thumb-foto{display:block;height:72px;border-radius:6px;overflow:hidden;background:#DDE1D8;padding:0}
+  .thumbs .thumb-foto img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumbs .thumb-laudo{height:72px;border-radius:6px;background:var(--green-bg);color:var(--green);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;text-align:center;padding:4px}
+  .voltar{display:inline-flex;align-items:center;min-height:44px;font-weight:600;font-size:15px}
+  .ficha-sec{border-top:1px solid #E6E8E3;margin-top:20px;padding-top:4px}
+  .confirmar{border:none;border-radius:16px;padding:24px;width:min(440px,calc(100vw - 32px));box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .confirmar::backdrop{background:rgba(26,31,28,.55)}
+  .confirmar h2{margin:0;font-size:22px}
+  .confirmar .valor{font-family:var(--font-archivo),sans-serif;font-weight:800;font-size:34px;margin-top:12px;font-variant-numeric:tabular-nums}
+  .confirmar .acoes{display:flex;gap:10px;margin-top:20px}
+  .confirmar .acoes .btn-ghost{min-height:52px;flex:none;padding:0 18px}
+  .confirmar .acoes .btn-primary{flex:1}
+  .aviso-cadastro{background:var(--gray-bg);border-radius:10px;padding:14px;font-size:15px;line-height:1.45}
+  .aviso-cadastro .btn-primary{width:100%;margin-top:12px}
+  .teto-ativo{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:14px;font-weight:600;color:var(--green)}

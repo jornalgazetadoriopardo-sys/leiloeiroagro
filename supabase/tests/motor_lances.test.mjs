@@ -537,3 +537,25 @@ describe('Seção 4.3 / 7.4 — segurança e anonimato', () => {
     assert.ok(acoes.some((a) => a.acao === 'lance_recusado'));
   });
 });
+
+describe('Página do lote — visitante sem login', () => {
+  test('lê catálogo, histórico anônimo e config pública, mas não dá lance', async () => {
+    const id = await criarLote();
+    await lance('A', id, 2800);
+    const v = new pg.Client({ connectionString: banco.url });
+    await v.connect();
+    try {
+      await v.query('set role anon');
+      assert.equal((await v.query(`select * from lotes_publicos where id = $1`, [id])).rowCount, 1);
+      const h = (await v.query(`select rotulo, e_meu from lances_publicos where lote_id = $1`, [id])).rows;
+      assert.match(h[0].rotulo, /^Comprador #\d+/);
+      assert.equal(h[0].e_meu, false);
+      const cfg = (await v.query(`select public.config_publica($1) as c`, [tenantId])).rows[0].c;
+      assert.deepEqual(cfg['lance.botoes_rapidos'], [20, 50, 100]);
+      assert.equal('comissao.comprador_pct' in cfg, false);
+      await assert.rejects(v.query(`select public.place_bid($1, 3000)`, [id]), /permission denied/);
+    } finally {
+      await v.end();
+    }
+  });
+});

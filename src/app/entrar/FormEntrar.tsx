@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { IconeAlerta } from '@/components/Icones';
 import { iniciarCadastro } from '@/lib/acoes-conta';
@@ -12,6 +12,9 @@ type Canal = 'sms' | 'whatsapp';
 
 export function FormEntrar({ canal }: { canal: Canal }) {
   const router = useRouter();
+  const voltarParam = useSearchParams().get('voltar');
+  // Só caminhos internos (evita redirecionar para outro site)
+  const voltar = voltarParam && /^\/(?!\/)/.test(voltarParam) ? voltarParam : null;
   const [etapa, setEtapa] = useState<'celular' | 'codigo'>('celular');
   const [celular, setCelular] = useState('');
   const [codigo, setCodigo] = useState('');
@@ -61,7 +64,7 @@ export function FormEntrar({ canal }: { canal: Canal }) {
         setErro(r.mensagem ?? 'Não foi possível entrar agora.');
         return;
       }
-      router.replace(r.destino);
+      router.replace(r.destino === '/conta' && voltar ? voltar : r.destino);
       router.refresh();
     });
   }

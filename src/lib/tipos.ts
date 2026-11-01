@@ -20,6 +20,7 @@ export interface LotePublico {
   uf: string;
   retirada_prazo: number;
   frete: 'comprador' | 'vendedor' | 'a_combinar';
+  tolerancia_quebra: number | null;
   preco_inicial: number;
   incremento: number;
   lance_atual: number | null;
@@ -45,3 +46,29 @@ export interface Tenant {
 }
 
 export type StatusVerificacao = 'pendente' | 'verificado' | 'divergente' | 'recusado' | 'suspenso';
+
+export interface MidiaLote {
+  id: string;
+  tipo: 'video' | 'foto' | 'laudo';
+  url: string;
+  ordem: number;
+}
+
+// Linha da view public.lances_publicos (anônima)
+export interface LancePublico {
+  id: string;
+  seq: number;
+  valor_por_cabeca: number;
+  criado_em: string;
+  rotulo: string;
+  e_meu: boolean;
+}
+
+export interface ConfigPublica {
+  incremento: number;
+  botoes: number[];
+  janelaMin: number;
+}
+
+/** Quem está vendo a página: decide o que o painel de lance oferece. */
+export type Visitante = 'visitante' | 'sem_cadastro' | 'cadastro_incompleto' | StatusVerificacao;

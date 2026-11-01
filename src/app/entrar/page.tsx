@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { FormEntrar } from './FormEntrar';
 
 export const metadata: Metadata = { title: 'Entrar – Pregão do Campo' };
@@ -7,7 +8,9 @@ export const metadata: Metadata = { title: 'Entrar – Pregão do Campo' };
 export default function Entrar() {
   return (
     <main className="pagina-estreita">
-      <FormEntrar canal={process.env.NEXT_PUBLIC_OTP_CANAL === 'whatsapp' ? 'whatsapp' : 'sms'} />
+      <Suspense fallback={<div className="skeleton" style={{ minHeight: 300 }} />}>
+        <FormEntrar canal={process.env.NEXT_PUBLIC_OTP_CANAL === 'whatsapp' ? 'whatsapp' : 'sms'} />
+      </Suspense>
     </main>
   );
 }
