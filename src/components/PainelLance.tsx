@@ -130,7 +130,7 @@ export function PainelLance(p: Props) {
   return (
     <div className="panel">
       <div role="status" aria-live="polite">
-        {agendado ? <div className="banner b-gray">Abre para lances em breve</div> : <FaixaStatus s={s} />}
+        <FaixaStatus s={s} />
       </div>
 
       <div>
@@ -166,16 +166,19 @@ export function PainelLance(p: Props) {
       {!encerrado && !agendado && (podeDarLance ? (
         <>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>{lote.lance_atual == null ? 'Dar o primeiro lance' : 'Cobrir com'}</div>
+            <div className={`titulo-lance${s === 'superado' ? ' cobrir' : ''}`}>
+              {lote.lance_atual == null ? 'Dar o primeiro lance' : s === 'superado' ? 'Cubra agora com' : s === 'lidera' ? 'Aumentar meu lance' : 'Dar lance com'}
+            </div>
             <div className="incs">
-              {p.config.botoes.map((inc) => (
-                <button key={inc} className="btn-primary" type="button" onClick={() => abrir('manual', valorBotao(inc))}
-                  aria-label={`Dar lance de ${brl(valorBotao(inc))} por cabeça`}>
-                  {lote.lance_atual == null && inc === p.config.botoes[0] ? brl(valorBotao(inc)) : `+ ${brl(valorBotao(inc) - base)}`}
+              {p.config.botoes.map((inc, i) => (
+                <button key={inc} className={`btn-rapido${i === 0 ? ' principal' : ''}${s === 'superado' ? ' cobrir' : ''}`} type="button"
+                  onClick={() => abrir('manual', valorBotao(inc))} aria-label={`Dar lance de ${brl(valorBotao(inc))} por cabeça`}>
+                  <span>{lote.lance_atual == null && i === 0 ? 'Lance inicial' : `+ ${brl(valorBotao(inc) - base)}`}</span>
+                  <small>{brl(valorBotao(inc))}/cab</small>
                 </button>
               ))}
             </div>
-            <div className="hint">Lance mínimo agora: {brl(lote.lance_minimo)}/cab · valores por cabeça</div>
+            <div className="hint">Lance mínimo agora: {brl(lote.lance_minimo)}/cab · você confirma antes de enviar</div>
           </div>
 
           <div className="auto">

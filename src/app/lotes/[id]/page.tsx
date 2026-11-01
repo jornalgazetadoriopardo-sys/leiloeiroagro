@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { Cabecalho } from '@/components/Cabecalho';
-import { IconeEscudo, IconeVistoria } from '@/components/Icones';
+import { SelosConfianca } from '@/components/Selos';
 import { MidiasLote } from '@/components/MidiasLote';
 import { PainelLance } from '@/components/PainelLance';
 import { brl, diaMes, faixaIdade, FRETE, plural } from '@/lib/formato';
@@ -35,21 +35,24 @@ async function Conteudo({ params }: { params: PageProps<'/lotes/[id]'>['params']
       <Cabecalho nome={tenant?.nome ?? 'Pregão do Campo'} status={statusCabecalho} />
       <main className="wrap" style={{ paddingTop: 12, paddingBottom: 48 }}>
         <Link href="/#lotes" className="voltar">‹ Todos os lotes</Link>
-        <div className="featured" style={{ marginTop: 8 }}>
-          <div className="f-lot">
+        <div className="lote-grid">
+          <div className="f-lot lote-midia">
             <MidiasLote midias={dados.midias} numero={numero} />
-            <div className="f-info">
-              <h1 style={{ margin: 0, fontWeight: 700, fontSize: 26 }}>{lote.titulo}</h1>
+            <div className="f-info" style={{ paddingBottom: 18 }}>
+              <h1 style={{ margin: 0, fontWeight: 800, fontSize: 26, lineHeight: 1.15 }}>{lote.titulo}</h1>
               <p className="where">{lote.cidade} – {lote.uf} · Vendedor: {lote.vendedor_rotulo.split(' · ')[0]}</p>
-              <div className="badges">
-                <span className="chip chip-green"><IconeEscudo tamanho={14} />Vendedor verificado</span>
-                <span className="chip chip-green"><IconeVistoria tamanho={14} />Vistoria por técnico credenciado</span>
-              </div>
+            </div>
+          </div>
+          <div className="lote-painel">
+            <PainelLance lote={lote} historico={dados.historico} meuTeto={dados.meuTeto} config={dados.config}
+              visitante={visitante} meuCodigo={dados.meuCodigo} servidorAgora={dados.servidorAgora} demo={dados.demo} />
+          </div>
+          <div className="f-lot lote-info">
+            <div className="f-info" style={{ paddingTop: 4 }}>
+              <SelosConfianca />
               <FichaTecnica lote={lote} />
             </div>
           </div>
-          <PainelLance lote={lote} historico={dados.historico} meuTeto={dados.meuTeto} config={dados.config}
-            visitante={visitante} meuCodigo={dados.meuCodigo} servidorAgora={dados.servidorAgora} demo={dados.demo} />
         </div>
       </main>
     </>

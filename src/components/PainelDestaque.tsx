@@ -2,7 +2,8 @@
 import Link from 'next/link';
 import { brl, diaMes, faixaIdade, FRETE, plural, tempoRestante } from '@/lib/formato';
 import type { LotePublico } from '@/lib/tipos';
-import { IconeEscudo, IconePlay, IconeVistoria } from './Icones';
+import { IconePlay } from './Icones';
+import { SelosConfianca } from './Selos';
 import { FaixaStatus, situacao } from './StatusLance';
 import { useEstadoLote } from './useEstadoLote';
 import { useAgora } from './useRelogio';
@@ -48,10 +49,7 @@ export function PainelDestaque({ lote: inicial, servidorAgora, meuCodigo, demo }
             <div><dt>Sanidade</dt><dd>{lote.sanidade?.vacinas ?? 'Ver laudo'} · GTA na venda</dd></div>
             <div><dt>Retirada</dt><dd>Até {lote.retirada_prazo} dias · {FRETE[lote.frete]}</dd></div>
           </dl>
-          <div className="badges">
-            <span className="chip chip-green"><IconeEscudo tamanho={14} />Vendedor verificado</span>
-            <span className="chip chip-green"><IconeVistoria tamanho={14} />Vistoria por técnico credenciado</span>
-          </div>
+          <SelosConfianca />
         </div>
       </div>
 
@@ -77,18 +75,20 @@ export function PainelDestaque({ lote: inicial, servidorAgora, meuCodigo, demo }
         </div>
 
         <div>
-          <Link className="btn-primary" style={{ width: '100%' }} href={`/lotes/${lote.id}`}
-            aria-disabled={encerrado} tabIndex={encerrado ? -1 : undefined}>
-            {encerrado ? 'Ver resultado' : `Dar lance de ${brl(lote.lance_minimo)}/cab`}
-          </Link>
+          {encerrado ? (
+            <Link className="btn-secundario" href={`/lotes/${lote.id}`}>Ver resultado</Link>
+          ) : (
+            <Link className={`btn-lance${s === 'superado' ? ' btn-cobrir' : ''}`} href={`/lotes/${lote.id}`}>
+              <span>{s === 'superado' ? 'Cobrir agora' : s === 'lidera' ? 'Acompanhar lote' : 'Dar lance'}</span>
+              {s !== 'lidera' && <small>{brl(lote.lance_minimo)}/cab</small>}
+            </Link>
+          )}
           <div className="hint">
             Lance mínimo agora: {brl(lote.lance_minimo)}/cab · total {brl(lote.lance_minimo * lote.quantidade)}
           </div>
         </div>
 
-        <div className="note">
-          Pagamento via conta garantia: o valor só é liberado ao vendedor depois da entrega e da conferência dos animais.
-        </div>
+        <div className="note">Lance é compromisso: o lance vencedor obriga a compra.</div>
       </div>
     </div>
   );
