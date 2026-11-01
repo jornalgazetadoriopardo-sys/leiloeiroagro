@@ -1,5 +1,6 @@
 -- =====================================================================
 -- Pregão do Campo — Fase 1 · Migração 4: cadastro e verificação
+-- Pode ser rodada mais de uma vez sem erro.
 -- Seção 5 do guia (fluxo do comprador/vendedor e status de cadastro)
 -- e seção 14 (consentimentos, documentos em armazenamento privado).
 -- =====================================================================
@@ -17,6 +18,7 @@ alter table public.usuarios
 create unique index if not exists usuarios_tenant_cpf_cnpj_unico
   on public.usuarios (tenant_id, cpf_cnpj) where cpf_cnpj is not null;
 
+alter table public.documentos drop constraint if exists documentos_tipo_valido;
 alter table public.documentos
   add constraint documentos_tipo_valido check (tipo in (
     'documento_foto', 'comprovante_endereco', 'selfie', 'gta', 'nota_fiscal', 'outro'));
@@ -318,6 +320,8 @@ begin
             array['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'application/pdf'])
     on conflict (id) do nothing;
 
+    execute $p$drop policy if exists "documentos: dono envia" on storage.objects$p$;
+    execute $p$drop policy if exists "documentos: dono ou equipe lê" on storage.objects$p$;
     execute $p$create policy "documentos: dono envia" on storage.objects for insert to authenticated
       with check (bucket_id = 'documentos' and app.caminho_do_usuario(name))$p$;
     execute $p$create policy "documentos: dono ou equipe lê" on storage.objects for select to authenticated
