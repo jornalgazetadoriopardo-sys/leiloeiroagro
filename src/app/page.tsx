@@ -79,7 +79,7 @@ function Regras() {
           <div><b>Valor por cabeça</b><span>Todo lance é por animal. O total do lote é calculado na hora. Incremento mínimo de R$ 20.</span></div>
           <div><b>Prorrogação automática</b><span>Lance nos últimos 3 minutos estende o prazo para 3 minutos de novo. Ninguém ganha no último segundo.</span></div>
           <div><b>Lance é compromisso</b><span>O lance vencedor obriga a compra. Desistência gera multa e suspensão do cadastro.</span></div>
-          <div><b>Pagamento protegido</b><span>O comprador paga numa conta garantia. O vendedor recebe após a entrega conferida.</span></div>
+          <div><b>Pagamento à vista</b><span>Depois do arremate, a leiloeira envia as instruções de pagamento. Os dados de contato entre comprador e vendedor só são liberados depois do pagamento confirmado.</span></div>
           <div><b>Conferência na entrega</b><span>Pesagem na origem com tolerância de quebra definida no lote. Contestação até 48 h após o recebimento.</span></div>
           <div><b>Avisos no WhatsApp</b><span>Avisamos quando seu lance for coberto e quando faltarem 3 minutos para o fim.</span></div>
         </div>
