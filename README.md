@@ -19,7 +19,7 @@ Andamento: [`docs/ROADMAP-FASE-1.md`](docs/ROADMAP-FASE-1.md).
 
 ```bash
 npm install
-cp .env.example .env.local   # opcional: sem Supabase, abre em modo demonstração
+cp .env.example .env.local   # já aponta para o projeto Supabase do piloto
 npm run dev                  # http://localhost:3000
 ```
 
