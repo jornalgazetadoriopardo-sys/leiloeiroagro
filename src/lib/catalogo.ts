@@ -1,12 +1,11 @@
 import 'server-only';
 import { connection } from 'next/server';
 import { lotesDemo } from './demo';
+import { obterTenant } from './sessao';
 import { criarClienteServidor } from './supabase/server';
 import { supabaseConfigurado } from './supabase/config';
 import type { LotePublico, StatusVerificacao, Tenant } from './tipos';
 
-// Fase 1: um único tenant ativo. Na Fase 3 o tenant sai do subdomínio.
-const SUBDOMINIO = process.env.NEXT_PUBLIC_TENANT_SUBDOMINIO ?? 'piloto';
 
 export interface Catalogo {
   demo: boolean;
@@ -27,12 +26,7 @@ export async function carregarCatalogo(): Promise<Catalogo> {
   }
 
   const supabase = await criarClienteServidor();
-  const { data: tenant, error: erroTenant } = await supabase
-    .from('tenants')
-    .select('id, nome, subdominio, cor_destaque, logo_url')
-    .eq('subdominio', SUBDOMINIO)
-    .maybeSingle();
-  if (erroTenant) throw erroTenant;
+  const tenant = await obterTenant(supabase);
   if (!tenant) return { demo: false, tenant: null, lotes: [], servidorAgora: agora, usuario: null };
 
   let usuario: Catalogo['usuario'] = null;

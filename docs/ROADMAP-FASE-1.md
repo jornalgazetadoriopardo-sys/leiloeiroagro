@@ -5,8 +5,8 @@ Objetivo (guia, seção 15): um leilão real com 3 a 5 lotes e 20 a 30 comprador
 | # | Etapa | Status |
 |---|---|---|
 | 1 | **Fundação**: projeto Next.js (PWA), banco multi-tenant com RLS, motor de lances (seção 7) com os 12 testes obrigatórios, página inicial | ✅ feito |
-| 2 | Login por celular (OTP), cadastro, envio de documentos, consentimentos e opt-in de WhatsApp | próxima |
-| 3 | Página do lote: vídeo, fotos, laudo, ficha, cronômetro, lance rápido com confirmação, lance automático, histórico | |
+| 2 | Login por celular (OTP), cadastro, envio de documentos, consentimentos e opt-in de WhatsApp | ✅ feito |
+| 3 | Página do lote: vídeo, fotos, laudo, ficha, cronômetro, lance rápido com confirmação, lance automático, histórico | próxima |
 | 4 | Painel admin: fila de cadastros, cadastro de lotes (mídias), leilões e agendamento, ao vivo, pós-venda com "Marcar como pago" | |
 | 5 | Notificações: despachante de push + WhatsApp Cloud API (coberto, dou-lhe 3, arremate, cadastro aprovado) | |
 | 6 | Meus lances, Minhas compras (simples), Perfil, Preferências de aviso; service worker | |
@@ -35,6 +35,27 @@ Objetivo (guia, seção 15): um leilão real com 3 a 5 lotes e 20 a 30 comprador
 
 **App**: Next.js 16 + TypeScript, manifest PWA, identidade visual da seção 12, página inicial do protótipo
 lendo `lotes_publicos` com atualização em tempo real (ou dados de demonstração sem Supabase).
+
+## O que a etapa 2 entregou
+
+**Banco (`20261102000004_cadastro.sql`)**
+- `iniciar_cadastro(tenant)`: após o código do celular, cria o cadastro (status pendente, papel comprador) ou vincula
+  um convite pré-cadastrado pela leiloeira com o mesmo celular.
+- `enviar_cadastro(tenant, dados)`: valida nome, CPF/CNPJ (dígitos verificadores), cidade/UF, e-mail, referência,
+  documentos (com foto + comprovante; selfie se `cadastro.selfie_obrigatoria`) e aceites; grava consentimentos com
+  versão e IP; avisa admin e operadores. Um CPF/CNPJ por leiloeira.
+- `analisar_cadastro(usuario, aprovar|pedir_ajuste|recusar, observação)`: só admin; registra em `verificacoes` e
+  avisa o usuário.
+- Bucket privado `documentos` no Storage (`<tenant>/<usuário>/arquivo`): dono envia e lê, equipe lê, ninguém apaga.
+
+**Telas**: `/entrar` (celular → código), `/cadastro` (4 passos, fotos reduzidas antes do envio), `/conta` (status
+com ícone + texto), `/termos` (termos, regras e privacidade — **versão provisória**, redação final do advogado).
+
+**Testes**: 39 no total (8 novos de cadastro).
+
+Até a etapa 4 (painel admin), a aprovação é feita no SQL Editor:
+`select analisar_cadastro('<id do usuário>', 'aprovar');` (logado como admin) ou
+`update usuarios set status_verificacao = 'verificado' where id = '<id>';`.
 
 ## Valores provisórios (aguardam decisão — seção 17)
 
