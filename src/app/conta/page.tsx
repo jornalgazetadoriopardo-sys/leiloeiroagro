@@ -6,6 +6,7 @@ import { Cabecalho } from '@/components/Cabecalho';
 import { IconeAlerta, IconeCadeado, IconeEscudo, IconeRelogio, IconeX } from '@/components/Icones';
 import { sair } from '@/lib/acoes-conta';
 import { mascaraCelular, mascaraCpfCnpj } from '@/lib/brasil';
+import { obterEquipe } from '@/lib/admin';
 import { obterSessao, type MeuCadastro } from '@/lib/sessao';
 
 export const metadata: Metadata = { title: 'Minha conta – Pregão do Campo' };
@@ -22,7 +23,8 @@ export default function Conta(props: PageProps<'/conta'>) {
 async function Conteudo({ searchParams }: { searchParams: PageProps<'/conta'>['searchParams'] }) {
   const [{ tenant, logado, cadastro }, params] = await Promise.all([obterSessao(), searchParams]);
   if (!logado || !cadastro) redirect('/entrar');
-  if (!cadastro.cadastro_enviado_em) redirect('/cadastro');
+  const equipe = await obterEquipe();
+  if (!cadastro.cadastro_enviado_em && !equipe) redirect('/cadastro');
 
   return (
     <>
@@ -42,6 +44,7 @@ async function Conteudo({ searchParams }: { searchParams: PageProps<'/conta'>['s
             <div><dt>Seu código nos lances</dt><dd>Comprador #{cadastro.codigo_publico}</dd></div>
             <div><dt>Avisos no WhatsApp</dt><dd>{cadastro.optin_whatsapp ? 'Ativados' : 'Desativados'}</dd></div>
           </dl>
+          {equipe && <Link className="btn-aprovar btn-bloco" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 20 }} href="/admin">Abrir painel da leiloeira</Link>}
           <form action={sair}>
             <button className="btn-ghost btn-bloco" type="submit">Sair</button>
           </form>

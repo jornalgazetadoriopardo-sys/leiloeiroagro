@@ -285,3 +285,54 @@
   .senha-linha{display:flex;gap:8px}
   .senha-linha input{flex:1;min-width:0}
   .senha-linha .btn-ghost{min-height:52px;flex:none}
+
+  /* ===================== Painel da leiloeira ===================== */
+  .nav-admin{display:flex;gap:4px;overflow-x:auto;padding-bottom:0;scrollbar-width:none}
+  .nav-admin a{flex:none;padding:12px 14px;font-weight:700;font-size:15px;color:var(--ink2);border-bottom:3px solid transparent;min-height:44px}
+  .nav-admin a.ativo{color:var(--accent);border-bottom-color:var(--accent)}
+  .admin{padding-top:20px;padding-bottom:64px}
+  .admin h1{margin:0 0 4px;font-size:26px;font-weight:800}
+  .admin .sub-titulo{color:var(--ink2);margin:0 0 18px;font-size:15px}
+  .resumo{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+  .resumo a{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;color:var(--ink);box-shadow:var(--sombra)}
+  .resumo b{display:block;font-family:var(--font-archivo),sans-serif;font-size:40px;line-height:1}
+  .resumo span{display:block;margin-top:6px;font-weight:600;color:var(--ink2)}
+  .resumo a.alerta{border:2px solid var(--orange)}
+  .resumo a.alerta b{color:var(--orange)}
+  .lista-admin{display:grid;gap:10px}
+  .item-admin{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--ink)}
+  a.item-admin:hover{border-color:var(--accent);color:var(--ink)}
+  .item-admin .principal{flex:1 1 240px;min-width:0}
+  .item-admin .principal b{display:block;font-size:16px}
+  .item-admin .principal span{display:block;font-size:14px;color:var(--ink2);margin-top:2px}
+  .item-admin .valor{font-family:var(--font-archivo),sans-serif;font-weight:800;font-size:18px;font-variant-numeric:tabular-nums}
+  .etiqueta{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:5px 10px;border-radius:999px;white-space:nowrap}
+  .st-cinza{background:var(--gray-bg);color:#3E4741}
+  .st-verde{background:var(--green-bg);color:var(--green)}
+  .st-verde-forte{background:var(--green);color:#fff}
+  .st-laranja{background:var(--orange-bg);color:var(--orange)}
+  .st-azul{background:#E3ECF7;color:#1D4A7A}
+  .filtros-admin{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .filtros-admin a{min-height:40px;display:inline-flex;align-items:center;padding:0 14px;border-radius:999px;border:1px solid #C9CEC5;background:#fff;color:var(--ink);font-size:14px;font-weight:600}
+  .filtros-admin a.on{background:var(--accent);border-color:var(--accent);color:#fff}
+  .duas-colunas{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
+  @media (min-width:960px){.duas-colunas{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}}
+  .bloco{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .bloco h2{margin:0 0 12px;font-size:19px}
+  .bloco + .bloco{margin-top:16px}
+  .grade-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0 14px}
+  .grade-form .campo{margin-top:14px}
+  .grade-form .largo{grid-column:1 / -1}
+  .acoes-linha{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start}
+  .acoes-linha form{flex:1 1 200px}
+  .acoes-linha .btn-primary,.acoes-linha .btn-ghost,.acoes-linha .btn-perigo{width:100%;min-height:52px}
+  .btn-perigo{border:2px solid #9B2C1F;background:#fff;color:#9B2C1F;border-radius:10px;font-weight:700;font-size:15px;min-height:48px;padding:0 16px}
+  .btn-aprovar{border:none;border-radius:10px;background:var(--green);color:#fff;font-weight:800;font-size:16px;min-height:52px;width:100%}
+  .doc-admin{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line2)}
+  .midias-admin{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:10px}
+  .midias-admin figure{margin:0;position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--gray-bg)}
+  .midias-admin img{width:100%;height:96px;object-fit:cover;display:block}
+  .midias-admin figcaption{font-size:12px;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+  .midias-admin .rotulo-midia{height:96px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;text-align:center;padding:6px}
+  .tabela-wrap{overflow-x:auto}
+  .campo-inline{flex:1 1 220px;min-height:48px;border:1px solid #B9BFB5;border-radius:10px;padding:0 12px;font-size:16px}
