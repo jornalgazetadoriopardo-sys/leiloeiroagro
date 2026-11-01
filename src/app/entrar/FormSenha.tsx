@@ -13,6 +13,27 @@ import { supabaseConfigurado } from '@/lib/supabase/config';
 // para o login por código (NEXT_PUBLIC_LOGIN_MODO=codigo).
 const emailInterno = (digitos: string) => `${digitos}@celular.pregaodocampo.com.br`;
 
+// Mensagens claras para os erros do Supabase Auth (o código entre parênteses ajuda no suporte)
+function mensagemCadastro(codigo: string | undefined, texto: string): string {
+  switch (codigo) {
+    case 'user_already_exists':
+    case 'email_exists':
+      return 'Este celular já tem conta. Toque em "Já tenho conta" e entre com a senha.';
+    case 'weak_password':
+      return 'Senha fraca. Use pelo menos 6 caracteres, misturando letras e números.';
+    case 'email_address_not_authorized':
+    case 'over_email_send_rate_limit':
+      return 'O Supabase está tentando enviar e-mail de confirmação. Desative "Confirm email" em Authentication → Sign In / Providers → Email.';
+    case 'signup_disabled':
+    case 'email_provider_disabled':
+      return 'Cadastro desativado no Supabase. Ative "Allow new users to sign up" e o provedor Email em Authentication.';
+    case 'email_address_invalid':
+      return 'O Supabase recusou o endereço interno da conta (email_address_invalid).';
+    default:
+      return `Não foi possível criar a conta (${codigo ?? texto}).`;
+  }
+}
+
 export function FormSenha() {
   const router = useRouter();
   const voltarParam = useSearchParams().get('voltar');
@@ -41,10 +62,7 @@ export function FormSenha() {
           options: { data: { celular: '+' + digitos } },
         });
         if (error) {
-          setErro(/registered|already/i.test(error.message)
-            ? 'Este celular já tem conta. Toque em "Já tenho conta" e entre com a senha.'
-            : /password/i.test(error.message) ? 'Senha fraca. Use pelo menos 6 caracteres, misturando letras e números.'
-            : 'Não foi possível criar a conta agora. Tente de novo.');
+          setErro(mensagemCadastro(error.code, error.message));
           return;
         }
         if (!data.session) {
@@ -54,7 +72,9 @@ export function FormSenha() {
       } else {
         const { error } = await auth.signInWithPassword({ email: emailInterno(digitos), password: senha });
         if (error) {
-          setErro('Celular ou senha incorretos.');
+          setErro(error.code === 'invalid_credentials' ? 'Celular ou senha incorretos.'
+            : error.code === 'email_not_confirmed' ? 'Conta ainda não confirmada. Desative "Confirm email" no Supabase e crie a conta de novo.'
+            : `Não foi possível entrar (${error.code ?? error.message}).`);
           return;
         }
       }
