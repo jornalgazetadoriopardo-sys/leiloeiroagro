@@ -17,8 +17,12 @@ after(async () => {
   await banco?.parar();
 });
 
-async function pessoa(telefone) {
-  const auth = (await admin.query(`insert into auth.users (phone) values ($1) returning id`, [telefone])).rows[0].id;
+async function pessoa(telefone, { senha = false } = {}) {
+  // senha = login de teste: celular só nos dados da conta (não verificado)
+  const auth = senha
+    ? (await admin.query(`insert into auth.users (email, raw_user_meta_data) values ($1, $2) returning id`,
+        [`${telefone}@teste`, { celular: `+${telefone}` }])).rows[0].id
+    : (await admin.query(`insert into auth.users (phone) values ($1) returning id`, [telefone])).rows[0].id;
   const c = new pg.Client({ connectionString: banco.url });
   await c.connect();
   await c.query(`select set_config('request.jwt.claims', $1, false)`, [JSON.stringify({ sub: auth, role: 'authenticated' })]);
@@ -133,6 +137,37 @@ describe('Seção 5.1 — fluxo de cadastro', () => {
       `insert into documentos (tenant_id, dono_id, tipo, arquivo_url) values ($1, $2, 'documento_foto', 'outra/pasta/x.jpg')`,
       [tenantId, usuario_id]), /row-level security/);
     await assert.rejects(p.c.query(`update usuarios set status_verificacao = 'verificado' where id = $1`, [usuario_id]), /permission denied/);
+  });
+});
+
+describe('Login de teste (celular + senha)', () => {
+  test('cria cadastro com o celular dos dados da conta', async () => {
+    const p = await pessoa('5519991120001', { senha: true });
+    const r = await p.rpc('iniciar_cadastro', tenantId);
+    assert.equal(r.ok, true);
+    const u = (await admin.query(`select celular from usuarios where id = $1`, [r.usuario_id])).rows[0];
+    assert.equal(u.celular, '+5519991120001');
+  });
+
+  test('não assume convite nem cadastro de outro celular', async () => {
+    await admin.query(`insert into usuarios (tenant_id, celular, nome) values ($1, '+5519991120002', 'Convidado')`, [tenantId]);
+    const intruso = await pessoa('5519991120002', { senha: true });
+    const r = await intruso.rpc('iniciar_cadastro', tenantId);
+    assert.equal(r.ok, false);
+    assert.equal(r.codigo, 'celular_em_uso');
+    const dono = (await admin.query(`select auth_user_id from usuarios where celular = '+5519991120002'`)).rows[0];
+    assert.equal(dono.auth_user_id, null);
+  });
+
+  test('conta sem celular é recusada', async () => {
+    const auth = (await admin.query(`insert into auth.users (email) values ('sem@teste') returning id`)).rows[0].id;
+    const c = new pg.Client({ connectionString: banco.url });
+    await c.connect();
+    clientes.push(c);
+    await c.query(`select set_config('request.jwt.claims', $1, false)`, [JSON.stringify({ sub: auth, role: 'authenticated' })]);
+    await c.query('set role authenticated');
+    const r = (await c.query(`select public.iniciar_cadastro($1) as r`, [tenantId])).rows[0].r;
+    assert.equal(r.codigo, 'sem_celular');
   });
 });
 

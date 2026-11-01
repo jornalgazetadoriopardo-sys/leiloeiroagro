@@ -282,3 +282,6 @@
     .lote-info{grid-area:info}
     .lote-painel{grid-area:painel;position:sticky;top:16px}
   }
+  .senha-linha{display:flex;gap:8px}
+  .senha-linha input{flex:1;min-width:0}
+  .senha-linha .btn-ghost{min-height:52px;flex:none}
