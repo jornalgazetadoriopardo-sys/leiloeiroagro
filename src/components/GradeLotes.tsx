@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { brl, plural, tempoRestante } from '@/lib/formato';
 import type { LotePublico } from '@/lib/tipos';
-import { IconeEscudo, IconePlay, IconeRelogio } from './Icones';
-import { LinhaStatus, situacao } from './StatusLance';
+import { IconePlay, IconeRelogio } from './Icones';
+import { SelosCartao } from './Selos';
+import { situacao, TarjaStatus } from './StatusLance';
 import { useEstadoLote } from './useEstadoLote';
 import { useAgora } from './useRelogio';
 
@@ -64,33 +65,49 @@ function CartaoLote({ lote: inicial, servidorAgora, meuCodigo, demo }: Omit<Prop
   const agora = useAgora(servidorAgora);
   const ms = lote.termina_em ? new Date(lote.termina_em).getTime() - agora : 0;
   const encerrado = lote.status_publico === 'encerrado' || ms <= 0;
-  const classeTimer = encerrado ? ' ended' : ms < DEZ_MIN ? ' urgent' : '';
-  const idade = lote.idade_min != null ? ` · ${lote.idade_min} a ${lote.idade_max} meses` : '';
+  const s = situacao(lote, encerrado);
+  const urgente = !encerrado && ms < DEZ_MIN;
+  const href = `/lotes/${lote.id}`;
+  const precoPorCabeca = lote.lance_atual ?? lote.preco_inicial;
+  const idade = lote.idade_min != null ? `${lote.idade_min}–${lote.idade_max} m` : '—';
 
   return (
-    <article className="lot">
-      <div className="media">
+    <article className={`lot lot-${s}`}>
+      <Link href={href} className="media" aria-label={`Ver vídeo e detalhes do lote ${lote.numero ?? ''}`}>
         <IconePlay tamanho={18} cor="#2F3833" /><span>Vídeo do lote</span>
         <span className="tag">Lote {String(lote.numero ?? '').padStart(2, '0')}</span>
-        <span className={`timer${classeTimer}`}><IconeRelogio tamanho={12} /><span>{tempoRestante(ms)}</span></span>
+      </Link>
+      <div className={`timer-linha${encerrado ? ' ended' : urgente ? ' urgent' : ''}`}>
+        <IconeRelogio tamanho={18} />
+        <span>{encerrado ? 'Encerrado' : lote.status_publico === 'agendado' ? 'Fecha em' : urgente ? 'Últimos minutos' : 'Termina em'}</span>
+        {!encerrado && <strong>{tempoRestante(ms)}</strong>}
       </div>
+      {s !== 'sem_lance' && <TarjaStatus s={s} />}
       <div className="body">
         <div>
-          <h3>{lote.titulo}</h3>
-          <p className="meta">{lote.cidade} – {lote.uf} · {Number(lote.peso_medio).toLocaleString('pt-BR')} kg méd.{idade}</p>
+          <h3><Link href={href}>{lote.titulo}</Link></h3>
+          <p className="meta">{lote.cidade} – {lote.uf}</p>
         </div>
-        <div className="verified"><IconeEscudo tamanho={13} />Vendedor verificado · vistoria feita</div>
-        <div>
-          <div className="sub" style={{ fontWeight: 600 }}>{lote.lance_atual == null ? 'Lance inicial por cabeça' : 'Lance atual por cabeça'}</div>
-          <div className="per">{brl(lote.lance_atual ?? lote.preco_inicial)}</div>
-          <div className="sub">Total {brl(lote.total_atual)} · {plural(lote.qtd_lances, 'lance', 'lances')}</div>
+        <dl className="fatos">
+          <div><dt>Cabeças</dt><dd>{lote.quantidade}</dd></div>
+          <div><dt>Peso méd.</dt><dd>{Number(lote.peso_medio).toLocaleString('pt-BR')} kg</dd></div>
+          <div><dt>Idade</dt><dd>{idade}</dd></div>
+        </dl>
+        <div className="preco-cartao">
+          <div className="sub">{lote.lance_atual == null ? 'Lance inicial' : 'Lance atual'} · por cabeça</div>
+          <div className="per">{brl(precoPorCabeca)}</div>
+          <div className="sub">Total do lote <b>{brl(precoPorCabeca * lote.quantidade)}</b> · {plural(lote.qtd_lances, 'lance', 'lances')}</div>
         </div>
-        <LinhaStatus s={situacao(lote, encerrado)} />
+        <SelosCartao />
         <div className="actions">
-          {!encerrado && lote.status_publico === 'aberto' && (
-            <Link className="btn-primary" href={`/lotes/${lote.id}`}>Lance de {brl(lote.lance_minimo)}</Link>
+          {encerrado || lote.status_publico !== 'aberto' || s === 'lidera' ? (
+            <Link className="btn-secundario" href={href}>{s === 'lidera' ? 'Acompanhar lote' : 'Ver lote'}</Link>
+          ) : (
+            <Link className={`btn-lance${s === 'superado' ? ' btn-cobrir' : ''}`} href={href}>
+              <span>{s === 'superado' ? 'Cobrir agora' : 'Dar lance'}</span>
+              <small>{brl(lote.lance_minimo)}/cab</small>
+            </Link>
           )}
-          <Link className="btn-ghost" href={`/lotes/${lote.id}`}>Ver lote</Link>
         </div>
       </div>
     </article>

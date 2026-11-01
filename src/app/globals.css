@@ -178,3 +178,107 @@
   .aviso-cadastro{background:var(--gray-bg);border-radius:10px;padding:14px;font-size:15px;line-height:1.45}
   .aviso-cadastro .btn-primary{width:100%;margin-top:12px}
   .teto-ativo{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:14px;font-weight:600;color:var(--green)}
+
+  /* ===================== Revisão de layout (v2) ===================== */
+  :root{--orange-forte:#B4500F;--sombra:0 1px 2px rgba(26,31,28,.06),0 4px 16px rgba(26,31,28,.06)}
+
+  /* Cabeçalho mais limpo no celular */
+  @media (max-width:640px){
+    header nav{display:none}
+    .brand{font-size:18px}
+    .hero{padding-top:28px}
+    .hero p{font-size:16px}
+  }
+
+  /* Cartão do lote */
+  .grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+  .lot{border-width:1px;box-shadow:var(--sombra);transition:border-color .2s}
+  .lot.lot-lidera,.lot.lot-arrematado{border:2px solid var(--green)}
+  .lot.lot-superado{border:2px solid var(--orange)}
+  .lot .media{height:170px;color:#2F3833;text-decoration:none}
+  .lot .media:hover{color:#2F3833}
+  .lot .body{padding:18px;gap:14px}
+  .lot h3{font-size:21px;line-height:1.2}
+  .lot h3 a{color:var(--ink)}
+  .lot .meta{font-size:15px;color:var(--ink2);margin-top:4px}
+  .timer-linha{display:flex;align-items:center;gap:8px;padding:10px 18px;background:var(--gray-bg);color:#2F3833;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+  .timer-linha strong{margin-left:auto;font-family:var(--font-archivo),sans-serif;font-size:20px;font-weight:800}
+  .timer-linha.urgent{background:var(--orange);color:#fff}
+  .timer-linha.ended{background:#3E4741;color:#fff}
+  .tarja-sit{display:flex;align-items:center;gap:8px;padding:10px 18px;font-size:16px;font-weight:800}
+  .tarja-sit.sit-lidera{background:var(--green);color:#fff}
+  .tarja-sit.sit-superado{background:var(--orange-bg);color:var(--orange);border-bottom:1px solid #F3C9AB}
+  .tarja-sit.sit-encerrado{background:var(--gray-bg);color:#3E4741}
+  .tarja-sit.sit-neutra{background:var(--gray-bg);color:#3E4741;font-weight:700}
+  .fatos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .fatos div{padding:8px 10px;border-left:1px solid var(--line)}
+  .fatos div:first-child{border-left:none}
+  .fatos dt{font-size:11px}
+  .fatos dd{font-size:16px;font-weight:700;margin-top:2px;white-space:nowrap}
+  .preco-cartao .per{font-size:32px;line-height:1.1;margin:2px 0;font-variant-numeric:tabular-nums}
+  .preco-cartao .sub{font-size:14px;color:var(--ink2)}
+  .preco-cartao .sub b{color:var(--ink)}
+  .selos-cartao{display:flex;flex-wrap:wrap;gap:6px}
+  .selos-cartao span{display:inline-flex;align-items:center;gap:6px;background:var(--green-bg);color:var(--green);font-size:13px;font-weight:700;padding:6px 10px;border-radius:999px}
+  .lot .actions{margin-top:auto;display:block}
+
+  /* Botões de lance: grandes, com valor visível */
+  .btn-lance,.btn-secundario{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:60px;border-radius:12px;font-weight:800;font-size:18px;text-align:center;line-height:1.15;padding:8px 16px;text-decoration:none}
+  .btn-lance{background:var(--accent);color:#fff;box-shadow:0 2px 0 rgba(0,0,0,.18)}
+  .btn-lance small{font-size:14px;font-weight:600;opacity:.92;margin-top:2px}
+  .btn-lance:hover,.btn-lance:focus-visible{color:#fff;filter:brightness(1.12)}
+  .btn-lance.btn-cobrir{background:var(--orange-forte)}
+  .btn-secundario{background:#fff;color:var(--accent);border:2px solid var(--accent)}
+  .btn-secundario:hover{color:var(--accent);background:var(--green-bg)}
+
+  /* Faixa de situação no painel de lance */
+  .faixa-sit{display:flex;align-items:flex-start;gap:12px;border-radius:12px;padding:16px}
+  .faixa-sit b{display:block;font-size:19px;font-weight:800;line-height:1.2}
+  .faixa-sit span{display:block;font-size:14px;margin-top:4px;line-height:1.4;opacity:.95}
+  .faixa-sit svg{flex:none;margin-top:1px}
+  .faixa-sit.sit-lidera{background:var(--green);color:#fff}
+  .faixa-sit.sit-superado{background:var(--orange);color:#fff}
+  .faixa-sit.sit-encerrado{background:#3E4741;color:#fff}
+  .faixa-sit.sit-neutra{background:var(--gray-bg);color:#2F3833}
+  @media (prefers-reduced-motion:no-preference){
+    .faixa-sit.sit-superado,.tarja-sit.sit-superado{animation:chamar .5s ease-out 2}
+    @keyframes chamar{50%{transform:scale(1.02)}}
+  }
+
+  /* Botões de lance rápido */
+  .titulo-lance{font-size:16px;font-weight:800;margin-bottom:10px}
+  .titulo-lance.cobrir{color:var(--orange)}
+  .incs{gap:10px}
+  .btn-rapido{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:68px;border-radius:12px;border:2px solid var(--accent);background:#fff;color:var(--accent);font-weight:800;font-size:18px;line-height:1.1;padding:6px 4px;cursor:pointer}
+  .btn-rapido small{font-size:12px;font-weight:600;margin-top:4px;color:var(--ink2);font-variant-numeric:tabular-nums}
+  .btn-rapido.principal{background:var(--accent);color:#fff}
+  .btn-rapido.principal small{color:#fff;opacity:.9}
+  .btn-rapido.cobrir{border-color:var(--orange-forte);color:var(--orange-forte)}
+  .btn-rapido.principal.cobrir{background:var(--orange-forte);color:#fff}
+  .btn-rapido:active{transform:translateY(1px)}
+
+  /* Painel: preço maior */
+  .panel{box-shadow:var(--sombra);gap:20px}
+  .big-price{font-size:40px;line-height:1.05;font-variant-numeric:tabular-nums}
+  .clock{font-size:56px}
+
+  /* Selos de confiança */
+  .selos{margin-top:22px;background:var(--green-bg);border-radius:14px;padding:18px}
+  .selos-titulo{margin:0 0 12px;font-size:18px;font-weight:800;color:var(--green)}
+  .selos ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+  .selos li{display:flex;gap:12px;align-items:flex-start}
+  .selos li b{display:block;font-size:16px;color:var(--ink)}
+  .selos li span{display:block;font-size:14px;color:var(--ink2);margin-top:2px;line-height:1.4}
+  .selo-icone{flex:none;width:40px;height:40px;border-radius:999px;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center}
+  @media (min-width:900px){.selos ul{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .selos li .selo-icone{display:flex;margin-top:0;color:#fff}
+
+  /* Página do lote: no celular o painel de lance vem logo depois do vídeo */
+  .lote-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:8px}
+  .lote-grid .f-lot{flex:none}
+  @media (min-width:900px){
+    .lote-grid{grid-template-columns:minmax(0,1fr) 400px;grid-template-areas:"midia painel" "info painel";align-items:start;gap:24px}
+    .lote-midia{grid-area:midia}
+    .lote-info{grid-area:info}
+    .lote-painel{grid-area:painel;position:sticky;top:16px}
+  }

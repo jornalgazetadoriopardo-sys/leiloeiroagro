@@ -1,7 +1,7 @@
 import type { LotePublico } from '@/lib/tipos';
-import { IconeAlerta, IconeOk, IconePonto } from './Icones';
+import { IconeAlerta, IconeOk, IconePonto, IconeRelogio } from './Icones';
 
-type Situacao = 'lidera' | 'superado' | 'sem_lance' | 'arrematado' | 'encerrado' | 'agendado';
+export type Situacao = 'lidera' | 'superado' | 'sem_lance' | 'arrematado' | 'encerrado' | 'agendado';
 
 /** Situação do usuário no lote. Status nunca só pela cor: sempre ícone + texto. */
 export function situacao(lote: LotePublico, encerrado: boolean): Situacao {
@@ -12,23 +12,36 @@ export function situacao(lote: LotePublico, encerrado: boolean): Situacao {
   return 'sem_lance';
 }
 
-export function LinhaStatus({ s }: { s: Situacao }) {
-  switch (s) {
-    case 'lidera': return <div className="st st-green"><IconeOk />Você está liderando</div>;
-    case 'superado': return <div className="st st-orange"><IconeAlerta />Seu lance foi superado</div>;
-    case 'arrematado': return <div className="st st-green"><IconeOk />Arrematado por você</div>;
-    case 'encerrado': return <div className="st st-gray">Leilão encerrado</div>;
-    case 'agendado': return <div className="st st-gray"><IconePonto />Abre em breve</div>;
-    default: return <div className="st st-gray"><IconePonto />Você ainda não deu lance</div>;
-  }
+const TEXTO: Record<Situacao, { titulo: string; detalhe: string; classe: string }> = {
+  lidera: { titulo: 'Você está liderando', detalhe: 'Se ninguém cobrir até o fim, o lote é seu.', classe: 'sit-lidera' },
+  superado: { titulo: 'Seu lance foi coberto', detalhe: 'Outro comprador passou à frente. Cubra para voltar a liderar.', classe: 'sit-superado' },
+  arrematado: { titulo: 'Você arrematou este lote', detalhe: 'Enviaremos as instruções de pagamento.', classe: 'sit-lidera' },
+  encerrado: { titulo: 'Leilão encerrado', detalhe: 'Este lote não recebe mais lances.', classe: 'sit-encerrado' },
+  agendado: { titulo: 'Abre em breve', detalhe: 'Os lances começam no horário de abertura.', classe: 'sit-neutra' },
+  sem_lance: { titulo: 'Você ainda não deu lance', detalhe: '', classe: 'sit-neutra' },
+};
+
+function Icone({ s, tamanho }: { s: Situacao; tamanho: number }) {
+  if (s === 'lidera' || s === 'arrematado') return <IconeOk tamanho={tamanho} />;
+  if (s === 'superado') return <IconeAlerta tamanho={tamanho} />;
+  if (s === 'agendado') return <IconeRelogio tamanho={tamanho} />;
+  return <IconePonto tamanho={tamanho} />;
 }
 
+/** Faixa grande do painel de lance (página do lote e destaque). */
 export function FaixaStatus({ s }: { s: Situacao }) {
-  switch (s) {
-    case 'lidera': return <div className="banner b-green"><IconeOk tamanho={20} />Você está liderando</div>;
-    case 'superado': return <div className="banner b-orange"><IconeAlerta tamanho={20} />Seu lance foi superado</div>;
-    case 'arrematado': return <div className="banner b-green"><IconeOk tamanho={20} />Lote arrematado por você</div>;
-    case 'encerrado': return <div className="banner b-gray">Leilão encerrado</div>;
-    default: return null;
-  }
+  if (s === 'sem_lance') return null;
+  const t = TEXTO[s];
+  return (
+    <div className={`faixa-sit ${t.classe}`}>
+      <Icone s={s} tamanho={28} />
+      <div><b>{t.titulo}</b><span>{t.detalhe}</span></div>
+    </div>
+  );
+}
+
+/** Tarja de situação no topo do cartão do lote. */
+export function TarjaStatus({ s }: { s: Situacao }) {
+  const t = TEXTO[s];
+  return <div className={`tarja-sit ${t.classe}`}><Icone s={s} tamanho={18} />{t.titulo}</div>;
 }
