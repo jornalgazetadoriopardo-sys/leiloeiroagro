@@ -7,8 +7,8 @@ Objetivo (guia, seção 15): um leilão real com 3 a 5 lotes e 20 a 30 comprador
 | 1 | **Fundação**: projeto Next.js (PWA), banco multi-tenant com RLS, motor de lances (seção 7) com os 12 testes obrigatórios, página inicial | ✅ feito |
 | 2 | Login por celular (OTP), cadastro, envio de documentos, consentimentos e opt-in de WhatsApp | ✅ feito |
 | 3 | Página do lote: vídeo, fotos, laudo, ficha, cronômetro, lance rápido com confirmação, lance automático, histórico | ✅ feito |
-| 4 | Painel admin: fila de cadastros, cadastro de lotes (mídias), leilões e agendamento, ao vivo, pós-venda com "Marcar como pago" | próxima |
-| 5 | Notificações: despachante de push + WhatsApp Cloud API (coberto, dou-lhe 3, arremate, cadastro aprovado) | |
+| 4 | Painel admin: fila de cadastros, cadastro de lotes (mídias), leilões e agendamento, ao vivo, pós-venda com "Marcar como pago" | ✅ feito |
+| 5 | Notificações: despachante de push + WhatsApp Cloud API (coberto, dou-lhe 3, arremate, cadastro aprovado) | próxima |
 | 6 | Meus lances, Minhas compras (simples), Perfil, Preferências de aviso; service worker | |
 | 7 | Ensaio geral com leilão de teste, ajustes e publicação | |
 
@@ -70,6 +70,23 @@ Até a etapa 4 (painel admin), a aprovação é feita no SQL Editor:
   `config_publica(tenant)`. Arquivo para o SQL Editor: `supabase/atualizacoes/etapa-3-pagina-lote.sql`.
 - `supabase/atualizacoes/dados-de-teste.sql`: leilão fictício com 3 lotes para testar (com bloco para apagar).
 - Perguntas e respostas no lote ficam para a Fase 2 (seção 15).
+
+## O que a etapa 4 entregou
+
+Painel em `/admin` (admin e operador; atalho em "Minha conta"):
+- **Início**: contadores (cadastros para analisar, lotes em preparação/prontos/abertos, vendas a receber).
+- **Cadastros**: filas por status, dados, documentos por link temporário (10 min), aceites e histórico;
+  Aprovar · Pedir ajuste (com mensagem) · Recusar — só o admin decide.
+- **Lotes**: cadastro de vendedor e fazenda pela leiloeira, formulário completo da seção 6.1, envio de vídeo
+  (arquivo ou link do YouTube), fotos e laudo; pendências ("Falta vídeo", "Faltam fotos", "Falta laudo",
+  "Pesagem antiga"); Aprovar lote; Cancelar com motivo (avisa quem deu lance).
+- **Leilões**: criar com abertura, primeiro fechamento e intervalo; incluir/retirar lotes prontos; Agendar.
+- **Ao vivo**: líder (nome), lances, reserva atingida ou não, prorrogações; atualiza a cada 10 s.
+- **Pós-venda**: valor a cobrar (com comissão), valor a repassar, prazo/atraso; Marcar como pago.
+- Banco (`20261105000007_painel_admin.sql`): `criar_vendedor`, `salvar_lote`, `pendencias_lote`, `aprovar_lote`,
+  `definir_leilao_do_lote`, `cancelar_lote`, `confirmar_pagamento`, `resumo_painel`. Ninguém altera lotes direto
+  na tabela. Arquivo para o SQL Editor: `supabase/atualizacoes/etapa-4-painel.sql`.
+- Fica para depois: "Pausar lote", reenviar cobrança, oferecer ao 2º colocado (Fase 2), relatórios.
 
 ## Valores provisórios (aguardam decisão — seção 17)
 
